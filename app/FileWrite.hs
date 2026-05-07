@@ -1,54 +1,64 @@
 module FileWrite where
+
 import Types
 import System.IO
+import Data.Char (isSpace)
+import Text.Read (readMaybe)
 
--- Persistencia estructurada
--- Los registros financieros deben almacenarse en archivo (formato estructurado)
--- El sistema debe reconstruir la información correctamente al iniciar
+rutaRegistros :: FilePath
+rutaRegistros = "app/data/registros.txt"
 
--- Cargar los archivos
+rutaReglas :: FilePath
+rutaReglas = "app/data/reglas.txt"
+
+rutaPresupuestos :: FilePath
+rutaPresupuestos = "app/data/presupuestos.txt"
+
+limpiarLinea :: String -> String
+limpiarLinea = quitarEspaciosFinales . quitarEspaciosIniciales
+  where
+    quitarEspaciosIniciales = dropWhile isSpace
+    quitarEspaciosFinales = reverse . dropWhile isSpace . reverse
+
+lineasValidas :: String -> [String]
+lineasValidas contenido =
+    filter (not . null) (map limpiarLinea (lines contenido))
+
+leerListaDesdeArchivo :: Read a => FilePath -> IO [a]
+leerListaDesdeArchivo ruta = do
+    contenido <- readFile ruta
+    let ls = lineasValidas contenido
+    case traverse readMaybe ls of
+        Just xs -> return xs
+        Nothing -> error ("Error al leer datos en el archivo: " ++ ruta)
 
 cargarRegistros :: IO [RegistroFinanciero]
-cargarRegistros = do
-    let filePath = "app/data/registros.txt"
-    contents <- readFile filePath
-    let registros = map read (lines contents) :: [RegistroFinanciero]
-    return registros
+cargarRegistros = leerListaDesdeArchivo rutaRegistros
 
 cargarReglas :: IO [Regla]
-cargarReglas = do
-    let filePath = "app/data/reglas.txt"
-    contents <- readFile filePath
-    let reglas = map read (lines contents) :: [Regla]
-    return reglas
+cargarReglas = leerListaDesdeArchivo rutaReglas
 
 cargarPresupuestos :: IO [Presupuesto]
-cargarPresupuestos = do
-    let filePath = "app/data/presupuestos.txt"
-    contents <- readFile filePath
-    let presupuestos = map read (lines contents) :: [Presupuesto]
-    return presupuestos
+cargarPresupuestos = leerListaDesdeArchivo rutaPresupuestos
 
-cargarDatos :: IO ()
+guardarRegistros :: [RegistroFinanciero] -> IO ()
+guardarRegistros registros =
+    withFile rutaRegistros WriteMode $ \handle ->
+        mapM_ (hPutStrLn handle . show) registros
+
+guardarReglas :: [Regla] -> IO ()
+guardarReglas reglas =
+    withFile rutaReglas WriteMode $ \handle ->
+        mapM_ (hPutStrLn handle . show) reglas
+
+guardarPresupuestos :: [Presupuesto] -> IO ()
+guardarPresupuestos presupuestos =
+    withFile rutaPresupuestos WriteMode $ \handle ->
+        mapM_ (hPutStrLn handle . show) presupuestos
+
+cargarDatos :: IO ([RegistroFinanciero], [Regla], [Presupuesto])
 cargarDatos = do
     registros <- cargarRegistros
     reglas <- cargarReglas
     presupuestos <- cargarPresupuestos
-    putStrLn "Datos cargados exitosamente"
-guardarRegistros :: [RegistroFinanciero] -> IO ()
-guardarRegistros registros = do
-    let filePath = "registros.txt"
-    withFile filePath WriteMode $ \handle -> do
-        mapM_ (hPutStrLn handle . show) registros
-
-guardarReglas :: [Regla] -> IO ()
-guardarReglas reglas = do
-    let filePath = "reglas.txt"
-    withFile filePath WriteMode $ \handle -> do
-        mapM_ (hPutStrLn handle . show) reglas
-
-guardarPresupuestos :: [Presupuesto] -> IO ()
-guardarPresupuestos presupuestos = do
-    let filePath = "presupuestos.txt"
-    withFile filePath WriteMode $ \handle -> do
-        mapM_ (hPutStrLn handle . show) presupuestos
+    return (registros, reglas, presupuestos)

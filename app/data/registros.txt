@@ -1,0 +1,8 @@
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-05-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 85.0, categoria = Gasto, fecha = 2026-05-03 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
+RegistroFinanciero {monto = 95.0, categoria = Gasto, fecha = 2026-05-10 00:00:00 UTC, descripcion = "Restaurante", etiquetas = ["comida","variable"]}
+RegistroFinanciero {monto = 45.0, categoria = Gasto, fecha = 2026-05-07 00:00:00 UTC, descripcion = "Bus y taxi", etiquetas = ["transporte","variable"]}
+RegistroFinanciero {monto = 60.0, categoria = Gasto, fecha = 2026-05-11 00:00:00 UTC, descripcion = "Gasolina", etiquetas = ["transporte","fijo"]}
+RegistroFinanciero {monto = 70.0, categoria = Gasto, fecha = 2026-05-15 00:00:00 UTC, descripcion = "Cine y snacks", etiquetas = ["entretenimiento","variable"]}
+RegistroFinanciero {monto = 150.0, categoria = Ahorro, fecha = 2026-05-18 00:00:00 UTC, descripcion = "Ahorro del mes", etiquetas = ["ahorro","fijo"]}
+RegistroFinanciero {monto = 200.0, categoria = Inversion, fecha = 2026-05-20 00:00:00 UTC, descripcion = "Compra de fondos", etiquetas = ["inversion","variable"]}

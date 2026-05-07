@@ -1,0 +1,3 @@
+Regla {condicion = ">", valorAlerta = 150.0, presupuestoRelacionado = "comida", mensajeAlerta = "Los gastos de comida superaron el limite de alerta"}
+Regla {condicion = ">", valorAlerta = 90.0, presupuestoRelacionado = "transporte", mensajeAlerta = "Los gastos de transporte estan demasiado altos"}
+Regla {condicion = ">", valorAlerta = 60.0, presupuestoRelacionado = "entretenimiento", mensajeAlerta = "El gasto en entretenimiento esta creciendo mucho"}
