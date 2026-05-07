@@ -10,16 +10,16 @@ normalizarTexto :: String -> String
 normalizarTexto = map toLower
 
 mismoMesYAnio :: Integer -> Int -> UTCTime -> Bool
-mismoMesYAnio anioBuscado mesBuscado fechaRegistro =
-    anioRegistro == anioBuscado && mesRegistro == mesBuscado
+mismoMesYAnio anioBuscado numeroMesBuscado fechaRegistro =
+    anioRegistro == anioBuscado && mesRegistro == numeroMesBuscado
   where
     (anioRegistro, mesRegistro, _) = toGregorian (utctDay fechaRegistro)
 
 registrosDelMes :: Integer -> Int -> [RegistroFinanciero] -> [RegistroFinanciero]
 registrosDelMes _ _ [] = []
-registrosDelMes anio mes (r:rs)
-    | mismoMesYAnio anio mes (fecha r) = r : registrosDelMes anio mes rs
-    | otherwise = registrosDelMes anio mes rs
+registrosDelMes anio numeroMes (r:rs)
+    | mismoMesYAnio anio numeroMes (fecha r) = r : registrosDelMes anio numeroMes rs
+    | otherwise = registrosDelMes anio numeroMes rs
 
 totalPorTipo :: CategoriaRegistro -> [RegistroFinanciero] -> Double
 totalPorTipo _ [] = 0
@@ -28,44 +28,44 @@ totalPorTipo tipoBuscado (r:rs)
     | otherwise = totalPorTipo tipoBuscado rs
 
 totalIngresosMes :: Integer -> Int -> [RegistroFinanciero] -> Double
-totalIngresosMes anio mes registros =
-    totalPorTipo Ingreso (registrosDelMes anio mes registros)
+totalIngresosMes anio numeroMes registros =
+    totalPorTipo Ingreso (registrosDelMes anio numeroMes registros)
 
 totalGastosMes :: Integer -> Int -> [RegistroFinanciero] -> Double
-totalGastosMes anio mes registros =
-    totalPorTipo Gasto (registrosDelMes anio mes registros)
+totalGastosMes anio numeroMes registros =
+    totalPorTipo Gasto (registrosDelMes anio numeroMes registros)
 
 totalAhorrosMes :: Integer -> Int -> [RegistroFinanciero] -> Double
-totalAhorrosMes anio mes registros =
-    totalPorTipo Ahorro (registrosDelMes anio mes registros)
+totalAhorrosMes anio numeroMes registros =
+    totalPorTipo Ahorro (registrosDelMes anio numeroMes registros)
 
 totalInversionesMes :: Integer -> Int -> [RegistroFinanciero] -> Double
-totalInversionesMes anio mes registros =
-    totalPorTipo Inversion (registrosDelMes anio mes registros)
+totalInversionesMes anio numeroMes registros =
+    totalPorTipo Inversion (registrosDelMes anio numeroMes registros)
 
 flujoCajaMensual :: Integer -> Int -> [RegistroFinanciero] -> Double
-flujoCajaMensual anio mes registros =
+flujoCajaMensual anio numeroMes registros =
     ingresos - gastos - ahorros - inversiones
   where
-    ingresos = totalIngresosMes anio mes registros
-    gastos = totalGastosMes anio mes registros
-    ahorros = totalAhorrosMes anio mes registros
-    inversiones = totalInversionesMes anio mes registros
+    ingresos = totalIngresosMes anio numeroMes registros
+    gastos = totalGastosMes anio numeroMes registros
+    ahorros = totalAhorrosMes anio numeroMes registros
+    inversiones = totalInversionesMes anio numeroMes registros
 
 resumenMensual :: Integer -> Int -> [RegistroFinanciero] -> String
-resumenMensual anio mes registros =
-    "Resumen " ++ show mes ++ "/" ++ show anio
+resumenMensual anio numeroMes registros =
+    "Resumen " ++ show numeroMes ++ "/" ++ show anio
     ++ " | Ingresos: " ++ show ingresos
     ++ " | Gastos: " ++ show gastos
     ++ " | Ahorros: " ++ show ahorros
     ++ " | Inversiones: " ++ show inversiones
     ++ " | Flujo neto: " ++ show flujo
   where
-    ingresos = totalIngresosMes anio mes registros
-    gastos = totalGastosMes anio mes registros
-    ahorros = totalAhorrosMes anio mes registros
-    inversiones = totalInversionesMes anio mes registros
-    flujo = flujoCajaMensual anio mes registros
+    ingresos = totalIngresosMes anio numeroMes registros
+    gastos = totalGastosMes anio numeroMes registros
+    ahorros = totalAhorrosMes anio numeroMes registros
+    inversiones = totalInversionesMes anio numeroMes registros
+    flujo = flujoCajaMensual anio numeroMes registros
 
 compararPeriodos :: (Integer, Int) -> (Integer, Int) -> [RegistroFinanciero] -> String
 compararPeriodos (anio1, mes1) (anio2, mes2) registros =
