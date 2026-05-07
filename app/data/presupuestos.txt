@@ -1,0 +1,3 @@
+Presupuesto {categoriaPresupuesto = "comida", montoPresupuesto = 200.0}
+Presupuesto {categoriaPresupuesto = "transporte", montoPresupuesto = 100.0}
+Presupuesto {categoriaPresupuesto = "entretenimiento", montoPresupuesto = 80.0}
