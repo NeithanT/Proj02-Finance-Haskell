@@ -1,4 +1,4 @@
-module Main where
+A module Main where
 
 import FileWrite
 import Presupuestos
