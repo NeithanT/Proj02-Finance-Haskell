@@ -85,3 +85,27 @@ proyectarGasto etiqueta rs
 formatearProyeccion :: String -> Double -> String
 formatearProyeccion etiqueta proyeccion =
     "Proyeccion proximo mes para '" ++ etiqueta ++ "': " ++ show proyeccion
+
+-- 2.4 Simulacion financiera
+
+simularReduccion :: String -> Double -> [RegistroFinanciero] -> Double
+simularReduccion etiqueta porcentaje rs
+    | porcentaje < 0 || porcentaje > 100 = gastoActual
+    | otherwise = gastoActual * (1 - porcentaje / 100)
+  where
+    gastoActual = proyectarGasto etiqueta rs
+
+formatearSimulacion :: String -> Double -> Double -> String
+formatearSimulacion etiqueta porcentaje gastoNuevo =
+    "Simulacion '" ++ etiqueta ++ "' reduciendo " ++ show porcentaje
+    ++ "% -> Gasto proyectado: " ++ show gastoNuevo
+
+proyectarAhorro :: Double -> Int -> Double
+proyectarAhorro ahorroPorMes meses
+    | ahorroPorMes <= 0 || meses <= 0 = 0
+    | otherwise = ahorroPorMes * fromIntegral meses
+
+formatearProyeccionAhorro :: Double -> Int -> Double -> String
+formatearProyeccionAhorro ahorroPorMes meses total =
+    "Ahorrando " ++ show ahorroPorMes ++ " por mes durante "
+    ++ show meses ++ " meses = " ++ show total
