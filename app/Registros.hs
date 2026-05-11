@@ -2,7 +2,9 @@ module Registros where
 
 import Types
 import Data.Time (utctDay)
+import Data.Time.Calendar (toGregorian)
 import Data.Char (toLower)
+import Data.List (nub, sortBy)
 
 montoValido :: Double -> Bool
 montoValido m = m > 0
@@ -43,3 +45,29 @@ filtrarPorCategoria cat = filter (\r -> categoria r == cat)
 
 filtrarPorEtiqueta :: String -> [RegistroFinanciero] -> [RegistroFinanciero]
 filtrarPorEtiqueta etiqueta = filter (\r -> normalizar etiqueta `elem` map normalizar (etiquetas r))
+
+-- 2.3 Tendencias de gasto
+
+mesAnoDeRegistro :: RegistroFinanciero -> (Integer, Int)
+mesAnoDeRegistro r = (ano, mes)
+  where
+    (ano, mes, _) = toGregorian (utctDay (fecha r))
+
+mesesUnicos :: [RegistroFinanciero] -> [(Integer, Int)]
+mesesUnicos rs = nub (map mesAnoDeRegistro rs)
+
+gastoEtiquetaEnMes :: String -> (Integer, Int) -> [RegistroFinanciero] -> Double
+gastoEtiquetaEnMes etiqueta mesAno rs =
+    sum [monto r | r <- rs
+                 , categoria r == Gasto
+                 , normalizar etiqueta `elem` map normalizar (etiquetas r)
+                 , mesAnoDeRegistro r == mesAno]
+
+tendenciaGasto :: String -> [RegistroFinanciero] -> [((Integer, Int), Double)]
+tendenciaGasto etiqueta rs =
+    sortBy (\(m1, _) (m2, _) -> compare m1 m2)
+    [(m, gastoEtiquetaEnMes etiqueta m rs) | m <- mesesUnicos rs]
+
+formatearTendencia :: ((Integer, Int), Double) -> String
+formatearTendencia ((ano, mes), total) =
+    show mes ++ "/" ++ show ano ++ " | Gasto: " ++ show total
