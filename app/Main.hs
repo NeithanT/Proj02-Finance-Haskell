@@ -4,6 +4,8 @@ import FileWrite
 import Presupuestos
 import Reglas
 import Reportes
+import Analisis
+import Simulacion
 
 mostrarMenu :: IO ()
 mostrarMenu = do
@@ -13,7 +15,9 @@ mostrarMenu = do
     putStrLn "2. Ver reglas activadas"
     putStrLn "3. Ver top 3 categorias con mayor gasto"
     putStrLn "4. Ver resumen mensual"
-    putStrLn "5. Salir"
+    putStrLn "5. Analisis financiero"
+    putStrLn "6. Simulacion financiera"
+    putStrLn "7. Salir"
     putStrLn "--------------------------------------"
     putStrLn "Digite una opcion:"
 
@@ -53,7 +57,7 @@ cicloPrincipal = do
             cicloPrincipal
 
         "4" -> do
-            putStrLn "Digite el anio:"
+            putStrLn "Digite el año:"
             anio <- readLn :: IO Integer
             putStrLn "Digite el mes (1-12):"
             mes <- readLn :: IO Int
@@ -61,6 +65,14 @@ cicloPrincipal = do
             cicloPrincipal
 
         "5" -> do
+            menuAnalisis registros
+            cicloPrincipal
+
+        "6" -> do
+            menuSimulacion registros
+            cicloPrincipal
+
+        "7" -> do
             putStrLn "Saliendo del sistema..."
 
         _ -> do
