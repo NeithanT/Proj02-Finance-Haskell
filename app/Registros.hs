@@ -71,3 +71,17 @@ tendenciaGasto etiqueta rs =
 formatearTendencia :: ((Integer, Int), Double) -> String
 formatearTendencia ((ano, mes), total) =
     show mes ++ "/" ++ show ano ++ " | Gasto: " ++ show total
+
+-- 2.3 Proyeccion de gastos basada en datos historicos
+
+proyectarGasto :: String -> [RegistroFinanciero] -> Double
+proyectarGasto etiqueta rs
+    | null tendencia = 0
+    | otherwise = totalGasto / fromIntegral (length tendencia)
+  where
+    tendencia = tendenciaGasto etiqueta rs
+    totalGasto = sum (map snd tendencia)
+
+formatearProyeccion :: String -> Double -> String
+formatearProyeccion etiqueta proyeccion =
+    "Proyeccion proximo mes para '" ++ etiqueta ++ "': " ++ show proyeccion
