@@ -20,8 +20,10 @@ mostrarMenuPrincipal = do
     putStrLn "1. Gestion de Registros"
     putStrLn "2. Presupuestos"
     putStrLn "3. Reglas"
-    putStrLn "4. Reportes y Analisis"
-    putStrLn "5. Salir"
+    putStrLn "4. Reportes"
+    putStrLn "5. Analisis Financiero"
+    putStrLn "6. Simulacion Financiera"
+    putStrLn "7. Salir"
     putStrLn "----------------------------------"
     putStrLn "Opcion:"
 
@@ -86,7 +88,9 @@ cicloPrincipal = do
         "2" -> menuPresupuestos registros reglas presupuestos
         "3" -> menuReglas registros reglas presupuestos
         "4" -> menuReportes registros reglas presupuestos
-        "5" -> putStrLn "Saliendo del sistema..."
+        "5" -> menuAnalisis registros >> cicloPrincipal
+        "6" -> menuSimulacion registros >> cicloPrincipal
+        "7" -> putStrLn "Saliendo del sistema..."
         _   -> do
             putStrLn "Opcion invalida."
             cicloPrincipal
@@ -239,11 +243,17 @@ menuReglas registros reglas presupuestos = do
             putStrLn "Regla agregada."
             cicloPrincipal
         "4" -> do
-            putStrLn "Digite el año:"
-            anio <- readLn :: IO Integer
-            putStrLn "Digite el mes (1-12):"
-            mes <- readLn :: IO Int
-            putStrLn (resumenMensual anio mes registros)
+            if null reglas
+                then putStrLn "No hay reglas registradas."
+                else do
+                    mapM_ putStrLn (zipWith mostrarRegla [1..] reglas)
+                    putStrLn "Numero de regla a eliminar:"
+                    idx <- readLn :: IO Int
+                    if idx < 1 || idx > length reglas
+                        then putStrLn "Indice invalido."
+                        else do
+                            guardarReglas (take (idx - 1) reglas ++ drop idx reglas)
+                            putStrLn "Regla eliminada."
             cicloPrincipal
         "5" -> cicloPrincipal
         _   -> do

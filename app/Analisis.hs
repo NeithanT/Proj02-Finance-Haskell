@@ -32,7 +32,7 @@ gastoMensual anio mes registros =
 -- Tendencias de gasto: variación porcentual entre periodos consecutivos
 tendenciaGasto :: [(Integer, Int)] -> [RegistroFinanciero] -> [String]
 tendenciaGasto [] _ = []
-tendenciaGasto [p] _ = []
+tendenciaGasto [_] _ = []
 tendenciaGasto (p1:p2:ps) registros =
     linea : tendenciaGasto (p2:ps) registros
   where
