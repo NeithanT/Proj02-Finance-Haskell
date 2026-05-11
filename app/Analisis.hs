@@ -63,6 +63,49 @@ mostrarPorcentaje p =
         entero = round p :: Int
     in signo ++ show entero ++ "%"
 
+-- Promedio de gastos sobre periodos históricos
+promedioHistorico :: [(Integer, Int)] -> [RegistroFinanciero] -> Double
+promedioHistorico [] _ = 0
+promedioHistorico periodos registros =
+    sumaGastos periodos registros / fromIntegral (length periodos)
+
+sumaGastos :: [(Integer, Int)] -> [RegistroFinanciero] -> Double
+sumaGastos [] _ = 0
+sumaGastos (p:ps) registros =
+    gastoDelPeriodo p registros + sumaGastos ps registros
+
+-- Proyección de gastos para N meses futuros (basada en promedio histórico)
+proyeccionGasto :: [(Integer, Int)] -> Int -> [RegistroFinanciero] -> [String]
+proyeccionGasto periodos mesesFuturos registros =
+    encabezado : generarProyecciones 1 mesesFuturos promedio
+  where
+    promedio   = promedioHistorico periodos registros
+    encabezado = "Promedio historico de gastos: " ++ show promedio
+
+generarProyecciones :: Int -> Int -> Double -> [String]
+generarProyecciones actual total promedio
+    | actual > total = []
+    | otherwise =
+        ("  Mes +" ++ show actual ++ ": gasto proyectado = " ++ show promedio
+         ++ " | acumulado = " ++ show (promedio * fromIntegral actual))
+        : generarProyecciones (actual + 1) total promedio
+
+-- Identificación de categorías con mayor impacto financiero
+impactoFinanciero :: [RegistroFinanciero] -> [String]
+impactoFinanciero registros =
+    "Categorias con mayor impacto financiero:"
+    : formatearImpacto (categoriasConMayorGasto registros)
+
+formatearImpacto :: [(String, Double)] -> [String]
+formatearImpacto [] = ["  (sin datos de gastos)"]
+formatearImpacto pares = numerarLista 1 pares
+
+numerarLista :: Int -> [(String, Double)] -> [String]
+numerarLista _ [] = []
+numerarLista n ((cat, total):xs) =
+    ("  " ++ show n ++ ". " ++ cat ++ ": " ++ show total)
+    : numerarLista (n + 1) xs
+
 -- ============================================================
 -- Submenú interactivo de análisis
 -- ============================================================
