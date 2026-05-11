@@ -5,6 +5,9 @@ import Presupuestos
 import Reglas
 import Registros
 import Reportes
+import Analisis
+import Simulacion
+
 import Types
 import Data.Time (getCurrentTime)
 
@@ -236,17 +239,11 @@ menuReglas registros reglas presupuestos = do
             putStrLn "Regla agregada."
             cicloPrincipal
         "4" -> do
-            if null reglas
-                then putStrLn "No hay reglas registradas."
-                else do
-                    mapM_ putStrLn (zipWith mostrarRegla [1..] reglas)
-                    putStrLn "Numero de regla a eliminar:"
-                    idx <- readLn :: IO Int
-                    if idx < 1 || idx > length reglas
-                        then putStrLn "Indice invalido."
-                        else do
-                            guardarReglas (take (idx - 1) reglas ++ drop idx reglas)
-                            putStrLn "Regla eliminada."
+            putStrLn "Digite el año:"
+            anio <- readLn :: IO Integer
+            putStrLn "Digite el mes (1-12):"
+            mes <- readLn :: IO Int
+            putStrLn (resumenMensual anio mes registros)
             cicloPrincipal
         "5" -> cicloPrincipal
         _   -> do

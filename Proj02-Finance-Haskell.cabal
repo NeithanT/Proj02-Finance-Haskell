@@ -67,7 +67,9 @@ executable Proj02-Finance-Haskell
         Presupuestos
         Reglas
         Reportes
+        Simulacion
         Registros
+        Analisis
 
     -- Modules included in this executable, other than Main.
     -- other-modules:
