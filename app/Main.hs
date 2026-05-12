@@ -64,7 +64,7 @@ mostrarMenuReglas = do
 mostrarMenuReportes :: IO ()
 mostrarMenuReportes = do
     putStrLn ""
-    putStrLn "--- Reportes y Analisis ---"
+    putStrLn "--- Reportes ---"
     putStrLn "1. Resumen mensual"
     putStrLn "2. Comparar dos periodos"
     putStrLn "3. Top categorias con mayor gasto"
