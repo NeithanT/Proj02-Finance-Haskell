@@ -1,3 +1,19 @@
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-11-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 95.0, categoria = Gasto, fecha = 2026-11-08 00:00:00 UTC, descripcion = "Regalos", etiquetas = ["otros","variable"]}
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-10-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 130.0, categoria = Gasto, fecha = 2026-10-06 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-09-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 110.0, categoria = Gasto, fecha = 2026-09-05 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
+RegistroFinanciero {monto = 55.0, categoria = Gasto, fecha = 2026-09-12 00:00:00 UTC, descripcion = "Restaurante", etiquetas = ["comida","variable"]}
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-08-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 125.0, categoria = Gasto, fecha = 2026-08-04 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
+RegistroFinanciero {monto = 65.0, categoria = Gasto, fecha = 2026-08-14 00:00:00 UTC, descripcion = "Gasolina", etiquetas = ["transporte","fijo"]}
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-07-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 115.0, categoria = Gasto, fecha = 2026-07-04 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
+RegistroFinanciero {monto = 80.0, categoria = Gasto, fecha = 2026-07-15 00:00:00 UTC, descripcion = "Restaurante", etiquetas = ["comida","variable"]}
+RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-06-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
+RegistroFinanciero {monto = 100.0, categoria = Gasto, fecha = 2026-06-05 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
+RegistroFinanciero {monto = 75.0, categoria = Gasto, fecha = 2026-06-12 00:00:00 UTC, descripcion = "Restaurante", etiquetas = ["comida","variable"]}
 RegistroFinanciero {monto = 1200.0, categoria = Ingreso, fecha = 2026-05-01 00:00:00 UTC, descripcion = "Salario mensual", etiquetas = ["salario","fijo"]}
 RegistroFinanciero {monto = 85.0, categoria = Gasto, fecha = 2026-05-03 00:00:00 UTC, descripcion = "Supermercado", etiquetas = ["comida","fijo"]}
 RegistroFinanciero {monto = 95.0, categoria = Gasto, fecha = 2026-05-10 00:00:00 UTC, descripcion = "Restaurante", etiquetas = ["comida","variable"]}
