@@ -94,7 +94,7 @@ generarDetalleAhorro :: Int -> Int -> Double -> [String]
 generarDetalleAhorro actual total ahorroMensual
     | actual > total = []
     | otherwise =
-        ("  Mes " ++ show actual
+        ("  Mes " ++ (if actual < 10 then "0" else "") ++ show actual
          ++ ": acumulado = " ++ show (ahorroMensual * fromIntegral actual))
         : generarDetalleAhorro (actual + 1) total ahorroMensual
 
