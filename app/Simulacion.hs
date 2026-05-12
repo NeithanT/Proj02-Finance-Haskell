@@ -2,6 +2,9 @@ module Simulacion where
 
 import Types
 import Reportes (totalPorTipo)
+import Data.Time (utctDay)
+import Data.Time.Calendar (toGregorian)
+import Data.List (nub)
 
 -- ============================================================
 -- 2.4 Simulación financiera
@@ -35,6 +38,20 @@ proyeccionAhorro :: Double -> Int -> Double
 proyeccionAhorro ahorroMensual meses =
     ahorroMensual * fromIntegral meses
 
+-- Número de meses distintos presentes en los datos
+mesesUnicos :: [RegistroFinanciero] -> Int
+mesesUnicos registros =
+    length (nub [(año, mesReg) | r <- registros,
+                                  let (año, mesReg, _) = toGregorian (utctDay (fecha r))])
+
+-- Gasto mensual promedio basado en los datos históricos
+gastoMensualPromedio :: [RegistroFinanciero] -> Double
+gastoMensualPromedio registros
+    | numMeses == 0 = 0
+    | otherwise     = totalGastos registros / fromIntegral numMeses
+  where
+    numMeses = mesesUnicos registros
+
 -- Proyección de ahorro con interés compuesto mensual
 -- tasaMensual en porcentaje, ej: 1.5 = 1.5%
 proyeccionAhorroConInteres :: Double -> Double -> Int -> Double
@@ -52,17 +69,19 @@ calcularConInteres aporte tasa mesRestante acumulado =
 simularEscenarioCompleto :: Double -> Int -> [RegistroFinanciero] -> [String]
 simularEscenarioCompleto porcentaje meses registros =
     [ "--- Simulacion Financiera ---"
-    , "Gastos actuales totales:    " ++ show gastos
-    , "Reduccion aplicada:         " ++ show porcentaje ++ "%"
-    , "Gastos simulados:           " ++ show gastosReducidos
-    , "Ahorro mensual estimado:    " ++ show ahorroMensual
-    , "Proyeccion a " ++ show meses ++ " meses:     " ++ show proyeccion
+    , "Meses con datos:               " ++ show numMeses
+    , "Gasto mensual promedio:        " ++ show gastoPromedio
+    , "Reduccion aplicada:            " ++ show porcentaje ++ "%"
+    , "Gasto mensual simulado:        " ++ show gastoSimulado
+    , "Ahorro mensual estimado:       " ++ show ahorroMensual
+    , "Proyeccion a " ++ show meses ++ " meses:      " ++ show proyeccion
     ]
   where
-    gastos          = totalGastos registros
-    gastosReducidos = simularReduccionGastos porcentaje registros
-    ahorroMensual   = ahorroPorReduccion porcentaje registros
-    proyeccion      = proyeccionAhorro ahorroMensual meses
+    numMeses      = mesesUnicos registros
+    gastoPromedio = gastoMensualPromedio registros
+    gastoSimulado = gastoPromedio * (1 - porcentaje / 100)
+    ahorroMensual = gastoPromedio * (porcentaje / 100)
+    proyeccion    = proyeccionAhorro ahorroMensual meses
 
 -- Reporte de proyección de ahorro detallado mes a mes
 reporteProyeccionAhorro :: Double -> Int -> [String]
@@ -97,12 +116,12 @@ menuSimulacion registros = do
         "1" -> do
             putStrLn "En que porcentaje desea reducir gastos? (ej: 20 para 20%)"
             porcentaje <- readLn :: IO Double
-            let gastos = totalGastos registros
-            let reducidos = simularReduccionGastos porcentaje registros
-            let ahorro = ahorroPorReduccion porcentaje registros
-            putStrLn ("Gastos actuales: " ++ show gastos)
-            putStrLn ("Gastos con reduccion del " ++ show porcentaje ++ "%: " ++ show reducidos)
-            putStrLn ("Ahorro generado: " ++ show ahorro)
+            let promedio = gastoMensualPromedio registros
+            let reducido = promedio * (1 - porcentaje / 100)
+            let ahorro   = promedio * (porcentaje / 100)
+            putStrLn ("Gasto mensual promedio: " ++ show promedio)
+            putStrLn ("Gasto mensual con reduccion del " ++ show porcentaje ++ "%: " ++ show reducido)
+            putStrLn ("Ahorro mensual generado: " ++ show ahorro)
             menuSimulacion registros
 
         "2" -> do
